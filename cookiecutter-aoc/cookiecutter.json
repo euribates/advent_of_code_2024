@@ -1,0 +1,4 @@
+{
+    "num": "9",
+    "__num": "{{ \"%02d\"|format(cookiecutter.num|int) }}"
+}
