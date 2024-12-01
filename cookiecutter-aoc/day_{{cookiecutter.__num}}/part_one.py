@@ -15,5 +15,4 @@ def main(options):
 
 
 if __name__ == '__main__':
-    options = get_options()
-    main(options)
+    main(get_options())
