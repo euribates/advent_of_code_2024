@@ -4,12 +4,14 @@ from core import get_options, load_input
 
 
 def main(options):
-    data = load_input(options.filename)
-    ...  # Calcula sol aqui
-    sol = len(data)
-    
-    print(f'[Day {{ cookiecutter.num }}] Sol. part two is: {sol}')
+    acc = 0
+    for data in load_input(options.filename):
+        ...
+        pass
+
+    return acc
 
 
 if __name__ == '__main__':
-    main(get_options())
+    sol = main(get_options())
+    print(f'[Day {{ cookiecutter.num }}] Sol. part two is: {sol}')
