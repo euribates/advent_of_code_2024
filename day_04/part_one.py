@@ -19,13 +19,11 @@ def main(options):
         text = core.as_string(sequence)
         acc += text.count(WORD)
         acc += text[::-1].count(WORD)
-
     # Up -> Down
     for sequence in core.iterate_diagonal_down(cols, rows, data):
         text = core.as_string(sequence)
         acc += text.count(WORD)
         acc += text[::-1].count(WORD)
-
     # Down -> Up
     for sequence in core.iterate_diagonal_up(cols, rows, data):
         text = core.as_string(sequence)
