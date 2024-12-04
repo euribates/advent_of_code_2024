@@ -42,3 +42,23 @@ def iterate_diagonal_down(cols, rows, data):
         yield go_down(cols, rows, data, 0, y)
     for x in range(0, cols):
         yield go_down(cols, rows, data, x, 0)
+
+
+def go_up(cols, rows, data, x, y):
+    return [
+        (x + delta, y - delta, data[x + delta, y - delta])
+        for delta in range(min(cols, rows))
+        if x + delta < cols and y - delta >= 0
+        ]
+
+
+def iterate_diagonal_up(cols, rows, data):
+    for y in range(rows):
+        yield go_up(cols, rows, data, 0, y)
+    y = rows - 1
+    for x in range(1, cols):
+        yield go_up(cols, rows, data, x, y)
+
+
+def as_string(seq):
+    return ''.join([_char for (_, _, _char) in seq])
