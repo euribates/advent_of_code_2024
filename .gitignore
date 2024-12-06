@@ -41,3 +41,6 @@ extra/
 *.swp
 .python-version
 exports/
+# Godot 4+ specific ignores
+.godot/
+/android/

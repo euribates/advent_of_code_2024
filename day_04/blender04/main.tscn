@@ -1,0 +1,53 @@
+[gd_scene load_steps=3 format=3 uid="uid://by2e1my2at56l"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_3qd4k"]
+
+[sub_resource type="TileSet" id="TileSet_6wauq"]
+tile_size = Vector2i(32, 32)
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_3qd4k")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -3.0
+offset_right = 1112.0
+offset_bottom = 640.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.03
+anchor_bottom = 1.0
+offset_left = 458.5
+offset_top = 284.5
+offset_right = -531.95
+offset_bottom = -324.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Seleccionar archivo"
+
+[node name="SelectFileDialog" type="FileDialog" parent="."]
+unique_name_in_owner = true
+title = "Open a File"
+initial_position = 2
+size = Vector2i(803, 433)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+
+[node name="TileMap" type="TileMapLayer" parent="."]
+unique_name_in_owner = true
+tile_set = SubResource("TileSet_6wauq")
+
+[connection signal="button_up" from="Control/Button" to="." method="_on_button_button_up"]
+[connection signal="file_selected" from="SelectFileDialog" to="." method="_on_select_file_dialog_file_selected"]
