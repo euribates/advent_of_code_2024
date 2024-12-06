@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
-from core import get_options, load_input
+import core
 
 
 def main(options):
     acc = 0
-    for data in load_input(options.filename):
+    for data in core.load_input(options.filename):
         ...
         pass
 
@@ -13,5 +13,5 @@ def main(options):
 
 
 if __name__ == '__main__':
-    sol = main(get_options())
+    sol = main(core.get_options())
     print(f'[Day {{ cookiecutter.num }}] Sol. part one is: {sol}')
