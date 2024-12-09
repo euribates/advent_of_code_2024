@@ -12,4 +12,5 @@ Welcome to my solutions for the [Advent of Code 2024](https://adventofcode.com/2
 - [Day 6: Guard Gallivant](./day_06/)
 - [Day 7: Bridge Repair](./day_07/)
 - [Day 8: Resonant Collinearity](./day_08/)
+- [Day 9: Disk Fragmenter](./day_09/)
 

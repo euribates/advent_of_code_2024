@@ -113,12 +113,24 @@ class Directory():
             print(f'{index:8} {node.num_blocks:25} {bar} {node.num_blocks}')
         print('-------- ------------------------- -------------- ')
 
-    def no_adjacent_gaps(self):
-        for (n1, n2) in itertools.pairwise(self.nodes):
-            if n1.id_file is None and n2.id_file is None:
-                self.dump()
-                return False
-        return True
+    def remove_adjacent_gaps(self):
+        if self.count_adjacent_gaps() == 0:
+            return
+        result = []
+        for node in self.nodes:
+            if result and node.is_free() and result[-1].is_free():
+                result[-1].num_blocks += node.num_blocks
+            else:
+                result.append(node)
+        self.nodes = result
+        assert self.count_adjacent_gaps() == 0, 'Hay {self.count_adjacent_gaps()} huecos'
+
+    def count_adjacent_gaps(self):
+        count = 0
+        for n1, n2 in itertools.pairwise(self.nodes):
+            if n1.is_free() and n2.is_free():
+                count += 1
+        return count
 
     def checksum(self):
         acc = 0

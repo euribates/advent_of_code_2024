@@ -4,39 +4,46 @@ import core
 
 
 def defrag(directory, trace=False):
+    directory.remove_adjacent_gaps()
     files_to_nodes = {}
     for node in directory.nodes:
         if node.is_file():
             files_to_nodes[node.id_file] = node
-
     for id_file, node in reversed(files_to_nodes.items()):
-        assert directory.no_adjacent_gaps()
-        print(
-            f'Buscando hueco para acomodar {node.num_blocks}'
-            f' (file {id_file})',
-            end='',
-            )
-        _index, first_hole = directory.first(
-            lambda b: b.num_blocks >= node.num_blocks
-                      and b.is_free()
-            )
-        if first_hole and _index <= id_file:
-            print(f' [ok Encontrado hueco en {first_hole}]')
-            print(' - ', directory.signature())
+        if trace:
+            print(
+                f'Searching free space to hold {node.num_blocks} bloks'
+                f' (file {id_file})',
+                end='',
+                )
+        first_hole = None
+        for _index, n in enumerate(directory.nodes):
+            if n.is_file():
+                if n.id_file == node.id_file:
+                    break
+            else:
+                if n.num_blocks >= node.num_blocks:
+                    first_hole = n
+                    break
+        if first_hole:
+            if trace:
+                print(f' [ok Found enough space at {first_hole}] _index is {_index}')
+                print(' - ', directory.signature())
             gap = first_hole.num_blocks - node.num_blocks
             if gap:
                 if directory.nodes[_index + 1].is_free():
-                    print('Fusion!')
                     directory.nodes[_index + 1].num_blocks += gap
                 else:
                     directory.nodes.insert(_index + 1, core.Node(gap))
-                    print('Insert!')
             first_hole.id_file = node.id_file
             first_hole.num_blocks = node.num_blocks
             node.id_file = None
-            print(' - ', directory.signature())
+            if trace:
+                print(' - ', directory.signature())
         else:
-            print(f'[No encuntro hueco]')
+            if trace:
+                print(f'[No adjacent space available]')
+        directory.remove_adjacent_gaps()
     return False
 
 
