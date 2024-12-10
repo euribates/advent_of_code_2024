@@ -13,4 +13,5 @@ def get_options():
 def load_input(filename: str):
     with open(filename) as f_input:
         for line in f_input:
+            line = line.strip()
             yield line
