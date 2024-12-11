@@ -13,5 +13,6 @@ Welcome to my solutions for the [Advent of Code 2024](https://adventofcode.com/2
 - [Day 7: Bridge Repair](./day_07/)
 - [Day 8: Resonant Collinearity](./day_08/)
 - [Day 9: Disk Fragmenter](./day_09/)
-- [Day 10:i Hoof It](./day_10/)
+- [Day 10: Hoof It](./day_10/)
+- [Day 11: Plutonian Pebbles](./day_11/)
 
