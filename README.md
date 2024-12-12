@@ -15,4 +15,5 @@ Welcome to my solutions for the [Advent of Code 2024](https://adventofcode.com/2
 - [Day 9: Disk Fragmenter](./day_09/)
 - [Day 10: Hoof It](./day_10/)
 - [Day 11: Plutonian Pebbles](./day_11/)
+- [Day 12: Garden Groups](./day_12/)
 

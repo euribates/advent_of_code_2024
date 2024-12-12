@@ -3,27 +3,21 @@
 import core
 
 
-def find_regions(world):
-    non_visited = list(world.all_nodes())
-    visited = set()
-    while frontier:
-        x, y, letter = frontier.pop(0)
-        initial = core.Vector(x, y)
-        frontier = [initial]
-        while frontier:
-            current = frontier.pop(0)
-            visited.add(current)
-
-            current = []
-            region = set([current])
+def perimeter(world, positions, letter):
+    result = len(positions) * 4
+    for pos in positions:
+        for neighbor in world.neighbors(pos):
+            if world.at(neighbor) == letter:
+                result = result - 1
+    return result
 
 
-
-    
 def main(options):
     acc = 0
     world = core.load_input(options.filename)
     world.show_world()
+    for region, area in world.find_regions():
+        acc = acc + len(area) * perimeter(world, area, region)
     return acc
 
 

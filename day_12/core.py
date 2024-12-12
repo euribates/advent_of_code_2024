@@ -16,6 +16,9 @@ class Vector2:
     x: int = 0
     y: int = 0
 
+    def copy(self):
+        return Vector2(x=self.x, y=self.y)
+
     def up(self):
         return Vector2(self.x, self.y - 1)
 
@@ -88,7 +91,30 @@ class World:
     def all_nodes(self):
         for (y, row) in enumerate(self.lines):
             for (x, cell) in enumerate(row):
-                yield (x, y, cell)
+                yield (Vector2(x, y), cell)
+
+    def find_regions(self):
+        non_visited = set(pos for (pos, _letter) in self.all_nodes())
+        while non_visited:
+            initial = non_visited.pop()
+            letter = self.at(initial)
+            pods = self.get_pod(initial, letter)
+            for pos in pods:
+                non_visited.discard(pos)
+            yield (letter, pods)
+
+    def get_pod(self, position, letter):
+        assert self.at(position) == letter
+        pods = set()
+        frontier = set([position])
+        while frontier:
+            current = frontier.pop()
+            pods.add(current)
+            for neighbor in self.neighbors(current):
+                if self.at(neighbor) == letter and neighbor not in pods:
+                    frontier.add(neighbor)
+        return pods
+
 
 
 def load_input(filename: str):
