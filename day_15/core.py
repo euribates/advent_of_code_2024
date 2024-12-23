@@ -101,6 +101,14 @@ class World:
             for line in lines:
                 self.add_line(line)
 
+    def __str__(self):
+        buff = []
+        for (y, row) in enumerate(self.lines):
+            for (x, cell) in enumerate(row):
+                buff.append(cell)
+            buff.append("\n")
+        return ''.join(buff)
+
     def copy(self):
         result = World()
         result.lines = copy.deepcopy(self.lines)
@@ -125,6 +133,7 @@ class World:
         if value:
             self.lines[pos.y][pos.x] = value
         return self.lines[pos.y][pos.x]
+
 
     def show_world(self, caption='', bot=None, direction=None):
         if caption:
@@ -214,7 +223,12 @@ class MoveCommand:
         source_item = world.at(self.position)
         next_pos = self.position + self.direction
         target_item = world.at(next_pos)
-        assert target_item == '.'
+        if target_item != '.':
+            raise ValueError(
+                f'Target item at {next_pos} must be .'
+                f' but is {target_item}\n'
+                f'World:\n{world}'
+                )
         world.at(next_pos, source_item)
         world.at(self.position, target_item)
 
@@ -271,7 +285,7 @@ def make_space(
         position: Vector2,
         direction: Direction,
         queue: typing.Deque,
-        ) -> bool:
+            ) -> bool:
     next_pos = position + direction
     item = world.at(next_pos)
     if item == '.':
@@ -282,13 +296,19 @@ def make_space(
         if direction in {LEFT, RIGHT}:
             queue.append(MoveCommand(next_pos, direction))
             return make_space(world, next_pos, direction, queue)
-        elif direction in {UP, DOWN}:
+        elif direction in {DOWN, UP}:
             if item == ']':
                 side_pos = next_pos + LEFT
-            else:
+            elif item == '[':
                 side_pos = next_pos + RIGHT
-            queue.append(MoveCommand(side_pos, direction))
-            queue.append(MoveCommand(next_pos, direction))
+            else:
+                raise ValueError('This is IMPOSSIBLE!')
+            cmd1 = MoveCommand(next_pos, direction)
+            if cmd1 not in queue:
+                queue.append(cmd1)
+            cmd2 = MoveCommand(side_pos, direction)
+            if cmd2 not in queue:
+                queue.append(cmd2)
             return (
                 make_space(world, side_pos, direction, queue)
                 and make_space(world, next_pos, direction, queue)
@@ -298,6 +318,20 @@ def make_space(
                 f'Impossible movement {direction}'
                 f' at position: {position}.'
                 )
+
+
+def move_all(world, bot, move, queue):
+    if move == UP:
+        cmds = sorted(queue, key=lambda c: c.position.y)
+    elif move == DOWN:
+        cmds = sorted(queue, key=lambda c: -c.position.y)
+    else:
+        cmds = reversed(queue)
+    for cmd in cmds:
+        cmd.apply_to(world)
+    world.at(bot, '.')
+    world.at(bot + move, '@')
+    return bot + move
 
 
 def load_input(filename: str):

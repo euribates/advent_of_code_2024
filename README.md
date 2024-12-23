@@ -18,4 +18,5 @@ Welcome to my solutions for the [Advent of Code 2024](https://adventofcode.com/2
 - [Day 12: Garden Groups](./day_12/)
 - [Day 13: Claw Contraption](./day_13/)
 - [Day 14: Restroom Redoubt](./day_14/)
+- [Day 15: Warehouse Woes](./day_15/)
 

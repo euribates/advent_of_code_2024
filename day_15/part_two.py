@@ -11,7 +11,7 @@ from core import Direction, UP, RIGHT, DOWN, LEFT
 from core import as_direction
 from core import MoveCommand
 from core import expand_world, expand_bot
-from core import make_space
+from core import make_space, move_all
 
 
 
@@ -41,27 +41,15 @@ def show_world(stdscr, world, bot, orientation, queue, trace=False):
         time.sleep(0.1)
 
 
-def main(stdscr):
-    options = get_options()
+def main(options):
     world, moves, bot = load_input(options.filename)
     world = expand_world(world)
     bot = expand_bot(bot)
-    show_world(stdscr, world, bot, UP, [], options.trace)
     for move in moves:
         queue = collections.deque()
         can_move = make_space(world, bot, move, queue)
         if can_move:
-            while queue:
-                movement = queue.pop()
-                show_world(stdscr, world, bot, move, queue, options.trace)
-                movement.apply_to(world)
-                show_world(stdscr, world, bot, move, queue, options.trace)
-            # Do initial movement
-            world.at(bot, '.')
-            bot = bot + move
-            world.at(bot, '@')
-            show_world(stdscr, world, bot, move, queue, options.trace)
-    stdscr.getkey()
+            bot = move_all(world, bot, move, queue)
     acc = 0
     for (pos, item) in world.all_nodes():
         if item == '[':
@@ -70,5 +58,6 @@ def main(stdscr):
 
 
 if __name__ == '__main__':
-    sol = curses.wrapper(main)
+    options = get_options()
+    sol = main(options)
     print(f'[Day 15] Sol. part two is: {sol}')

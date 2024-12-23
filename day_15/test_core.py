@@ -47,6 +47,30 @@ def test_make_space_up():
     assert world.at(bot + core.UP) == '.'
 
 
+def test_make_column_up():
+    world = core.World(lines=[
+        '##########',
+        '#........#',
+        '#...[][].#',
+        '#...[]...#',
+        '#...@....#',
+        '#........#',
+        '##########',
+        ])
+    bot = core.Vector2(4, 4)
+    assert world.at(bot) == '@'
+    move = core.UP
+    queue = collections.deque()
+    can_move = core.make_space(world, bot, move, queue)
+    assert can_move is True
+    assert len(queue) == 4
+    while queue:
+        move = queue.pop()
+        move.apply_to(world)
+    assert world.at(bot) == '@'
+    assert world.at(bot + core.UP) == '.'
+
+
 def test_make_space_down():
     world = core.World(lines=[
         '##########',
@@ -185,6 +209,33 @@ def test_sample_2():
     can_move = core.make_space(world, bot, move, queue)
     assert can_move is True
     assert len(queue) == 4
+
+
+def test_tricky():
+    world = core.World(lines=[
+        "#######################",
+        "##...................##",
+        "##...................##",
+        "##.....[]####........##",
+        "##.....##....[]......##",
+        "##.....##...[][].....##",
+        "##...##....[][]......##",
+        "##.......##..@.......##",
+        "##...##......[]......##",
+        "##...................##",
+        "##...................##",
+        "#######################",
+        ])
+    bot = core.Vector2(13, 7)
+    assert world.at(bot) == '@'
+    move = core.UP
+    queue = collections.deque()
+    can_move = core.make_space(world, bot, move, queue)
+    assert can_move
+    bot = core.move_all(world, bot, move, queue)
+    assert world.at(bot) == '@'
+
+
 
 
 if __name__ == "__main__":
