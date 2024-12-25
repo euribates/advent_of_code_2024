@@ -5,9 +5,8 @@ import core
 
 def main(options):
     acc = 0
-    world = core.load_input(options.filename)
-    world.show_world()
-    return acc
+    world, start, target = core.load_input(options.filename)
+    return core.a_star(world, start, target)
 
 
 if __name__ == '__main__':

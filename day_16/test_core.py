@@ -14,5 +14,12 @@ def test_load_input():
     assert world.direction == core.RIGHT
 
 
+def test_vector_distance():
+    assert core.distance(
+        core.Vector2(1, 1),
+        core.Vector2(3, 4),
+        ) == 5
+
+
 if __name__ == "__main__":
     pytest.main()
