@@ -4,9 +4,12 @@ import core
 
 
 def main(options):
-    acc = 0
     world, start, target = core.load_input(options.filename)
-    return core.a_star(world, start, target)
+    costs, come_from = core.a_star(world, start, target)
+    print(core.get_path(come_from, target, costs))
+    for pos, cost in sorted(costs.items()):
+        print(f"{pos.x}, {pos.y} : {cost}")
+    return costs[target]
 
 
 if __name__ == '__main__':

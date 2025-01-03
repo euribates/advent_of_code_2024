@@ -2,7 +2,6 @@
 
 import argparse
 import dataclasses
-import functools
 import heapq
 import itertools
 import typing
@@ -15,7 +14,7 @@ def get_options():
     return parser.parse_args()
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass(frozen=True, order=True)
 class Vector2:
 
     x: int = 0
@@ -221,7 +220,6 @@ def distance(source: Vector2, target: Vector2):
     return abs(source.x - target.x) + abs(source.y - target.y)
 
 
-
 class PriorityMap:
 
     def __init__(self):
@@ -278,15 +276,14 @@ class PriorityMap:
         raise KeyError('pop from an empty priority queue')
 
 
-def reverse_path(come_from, target, costs):
-    acc = 0
+def get_path(come_from, target, costs):
     result = [target]
     prev = come_from[target]
     while prev:
-        result.insert(0, prev)
-        acc += costs[prev]
+        # result.insert(0, prev)
+        result.append(prev)
         prev = come_from.get(prev, None)
-    return acc, result
+    return result
 
 
 def a_star(world: World, start, target, max_iterations=65536):
@@ -304,9 +301,10 @@ def a_star(world: World, start, target, max_iterations=65536):
             if neighbor.position in explored:
                 continue
             come_from[neighbor.position] = actor.position
-            if neighbor.position == target:
-                return costs[actor.position] + next_cost
             new_cost = cost + next_cost
+            if neighbor.position == target:
+                costs[target] = new_cost
+                return costs, come_from
             if frontier.it_exists(neighbor):
                 if frontier.get_priority(neighbor) <= new_cost:
                     continue

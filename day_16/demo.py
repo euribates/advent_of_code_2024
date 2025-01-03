@@ -4,9 +4,9 @@ import pygame
 
 import core
 
-FPS = 12
+FPS = 30
 
-SCALE = 6
+SCALE = 60
 if SCALE < 10:
     WIDTH = 1
 else:
